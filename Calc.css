@@ -1,0 +1,111 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    
+}
+
+/* MAIN CONTAINER */
+#main {
+    width: 450px;
+    height: 500px;
+    margin: 100px auto;
+    background-color: gray;
+    border-radius: 10px;
+    position: relative;
+}
+
+/* HEADER */
+#head {
+    width: 250px;
+    height: 50px;
+    margin: 10px;
+    text-align: center;
+    line-height: 50px;
+
+    color: white;
+    font-size: 200%;
+    font-weight: 900;
+    font-family: "Times New Roman", serif;
+
+    border: 5px solid gray;
+    border-radius: 10px;
+    background-color: gray;
+    text-shadow: 5px 2px 5px black;
+}
+
+/* DISPLAY */
+#res {
+    width: 400px;
+    height: 30px;
+    margin: 10px;
+    text-align: right;
+    border-radius: 10px;
+    font-size: 18px;
+    padding-right: 10px;
+}
+
+/* KEYPAD LAYOUT */
+#keypad {
+    display: grid;
+    grid-template-columns: 300px 70px;
+    gap: 20px;
+
+    margin-top: 10px;
+    margin-left: 20px;
+}
+
+/* NUMBER KEYS */
+#keys {
+    width: 300px;
+    height: 300px;
+
+    border: 1px dashed black;
+    border-radius: 10px;
+    
+    display: grid;
+    grid-template-columns: repeat(4, 60px);
+    gap: 10px;
+     justify-content: center;  /* horizontal centering */
+    align-content: center;
+
+
+}
+
+/* CALCULATE BUTTON */
+#calc {
+    width: 130px;
+}
+
+/* M KEYS */
+#mkeys {
+
+    width: 80px;
+    height: 300px;
+
+    border: 1px dashed black;
+    border-radius: 10px;
+
+
+    display: grid;
+    grid-template-rows: repeat(4, 50px);
+    gap: 15px;
+    margin-top: 5px;
+    justify-content: center;  /* horizontal centering */
+    align-content: center;
+}
+
+/* BUTTON STYLE */
+button {
+    width: 60px;
+    height: 50px;
+    background-color: rgb(223, 222, 222);
+    box-shadow: 0px 2px 5px black;
+    border: none;
+    cursor: pointer;
+}
+
+/* BUTTON PRESS EFFECT */
+button:active {
+    box-shadow: none;
+}
