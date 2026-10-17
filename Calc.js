@@ -154,4 +154,36 @@ document.addEventListener("DOMContentLoaded", () => {
   clearBtn.addEventListener("click", clearDisplay);
   backBtn.addEventListener("click", deleteLast);
 
+
+  /**********************************************************
+   * STEP 11: KEYBOARD SUPPORT
+   * --------------------------------------------------------
+   * 0-9 and + - * /  → same as clicking the button
+   * Enter or =       → Calculate
+   * Backspace        → delete last character
+   * Escape or Delete → clear
+   *
+   * Every key goes through the same functions as the buttons,
+   * so the same validation rules apply.
+   **********************************************************/
+  document.addEventListener("keydown", event => {
+    if (event.ctrlKey || event.metaKey || event.altKey) return;
+
+    const key = event.key;
+    if (/^[0-9]$/.test(key)) {
+      addDigit(key);
+    } else if (Calculator.OPERATORS.includes(key)) {
+      addOperator(key);
+    } else if (key === "Enter" || key === "=") {
+      calcBtn.click();
+    } else if (key === "Backspace") {
+      deleteLast();
+    } else if (key === "Escape" || key === "Delete") {
+      clearDisplay();
+    } else {
+      return; // let the browser handle every other key
+    }
+    event.preventDefault();
+  });
+
 });
