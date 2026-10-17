@@ -113,7 +113,10 @@ document.addEventListener("DOMContentLoaded", () => {
     try {
       display.value = Calculator.evaluate(display.value);
     } catch (error) {
-      display.value = "Error";
+      display.value =
+        error instanceof Calculator.DivisionByZeroError
+          ? "Can't divide by 0"
+          : "Error";
     }
   });
 

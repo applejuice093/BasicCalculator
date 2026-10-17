@@ -23,6 +23,14 @@
 
   const OPERATORS = "+-*/";
 
+  /** Thrown when an expression divides by zero (eval() returned Infinity). */
+  class DivisionByZeroError extends Error {
+    constructor() {
+      super("Division by zero");
+      this.name = "DivisionByZeroError";
+    }
+  }
+
   /**
    * Split an expression string into tokens.
    * A "-" at the start, or directly after another operator,
@@ -65,6 +73,7 @@
    * usual precedence (* and / before + and -).
    * @param {string} expression e.g. "12+3*4"
    * @returns {number} e.g. 24
+   * @throws {DivisionByZeroError} when dividing by zero
    * @throws {Error} when the expression is empty or malformed
    */
   function evaluate(expression) {
@@ -80,7 +89,10 @@
       const op = tokens[i];
       const value = tokens[i + 1];
       if (op === "*") terms[terms.length - 1] *= value;
-      else if (op === "/") terms[terms.length - 1] /= value;
+      else if (op === "/") {
+        if (value === 0) throw new DivisionByZeroError();
+        terms[terms.length - 1] /= value;
+      }
       else terms.push(op, value);
     }
 
@@ -92,5 +104,5 @@
     return result;
   }
 
-  return { OPERATORS, tokenize, evaluate };
+  return { OPERATORS, DivisionByZeroError, tokenize, evaluate };
 });

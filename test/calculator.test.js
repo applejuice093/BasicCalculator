@@ -2,7 +2,7 @@
 // Run with: npm test   (or: node --test test/)
 const test = require("node:test");
 const assert = require("node:assert/strict");
-const { tokenize, evaluate } = require("../calculator.js");
+const { tokenize, evaluate, DivisionByZeroError } = require("../calculator.js");
 
 test("tokenize splits numbers and operators", () => {
   assert.deepEqual(tokenize("12+3*4"), [12, "+", 3, "*", 4]);
@@ -33,4 +33,10 @@ test("evaluate rejects malformed expressions", () => {
   for (const bad of ["", "12+", "*3", "1..2", "alert(1)", "2**3"]) {
     assert.throws(() => evaluate(bad), Error, `expected "${bad}" to throw`);
   }
+});
+
+test("dividing by zero throws instead of returning Infinity", () => {
+  assert.throws(() => evaluate("5/0"), DivisionByZeroError);
+  assert.throws(() => evaluate("1+8/0*2"), DivisionByZeroError);
+  assert.equal(evaluate("0/5"), 0);
 });
