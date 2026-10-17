@@ -17,6 +17,10 @@ document.addEventListener("DOMContentLoaded", () => {
    * This is the input box where:
    * → Numbers appear when buttons are clicked
    * → Result is shown after calculation
+   *
+   * It is readonly in index.html, so text can only enter it
+   * through the buttons (and keyboard handler below) that
+   * validate every keystroke.
    **********************************************************/
   const display = document.getElementById("res");
 
@@ -24,14 +28,16 @@ document.addEventListener("DOMContentLoaded", () => {
   /**********************************************************
    * STEP 3: GET ALL NUMBER BUTTONS
    * --------------------------------------------------------
-   * We select buttons inside #keys EXCEPT the Calculate button.
+   * We select buttons inside #keys EXCEPT Calculate, Clear
+   * and Backspace.
    *
    * CSS selector explanation:
    * #keys button        → all buttons inside #keys
    * :not(#calc)         → exclude Calculate button
+   * :not(.wide)         → exclude Clear and Backspace buttons
    **********************************************************/
   const numberButtons = document.querySelectorAll(
-    "#keys button:not(#calc)"
+    "#keys button:not(#calc):not(.wide)"
   );
 
 
@@ -50,6 +56,8 @@ document.addEventListener("DOMContentLoaded", () => {
    * STEP 5: GET THE CALCULATE BUTTON
    **********************************************************/
   const calcBtn = document.getElementById("calc");
+  const clearBtn = document.getElementById("clear");
+  const backBtn = document.getElementById("back");
 
 
   /**********************************************************
@@ -57,34 +65,38 @@ document.addEventListener("DOMContentLoaded", () => {
    * --------------------------------------------------------
    * When a number button is clicked:
    * → Its text (1,2,3...) is appended to the display
+   * → Right after a result or an error, it starts a new
+   *   expression instead (see Calculator.appendDigit)
+   *
+   * justEvaluated remembers whether the display currently
+   * shows the answer of the last calculation.
    **********************************************************/
+  let justEvaluated = false;
+
+  function addDigit(digit) {
+    display.value = Calculator.appendDigit(display.value, digit, justEvaluated);
+    justEvaluated = false;
+  }
+
   numberButtons.forEach(button => {
-    button.addEventListener("click", () => {
-      display.value += button.innerText;
-    });
+    button.addEventListener("click", () => addDigit(button.innerText));
   });
 
 
   /**********************************************************
    * STEP 7: FUNCTION TO ADD OPERATORS SAFELY
    * --------------------------------------------------------
-   * This function prevents:
+   * Calculator.appendOperator prevents:
    * → Starting with an operator (+12 ❌)
    * → Multiple operators in a row (12++ ❌)
+   * → Operators after an error message (Error+ ❌)
+   *
+   * Pressing an operator after a result keeps the result,
+   * so "24" then "+" continues with "24+".
    **********************************************************/
   function addOperator(operator) {
-
-    // Do nothing if display is empty
-    if (display.value === "") return;
-
-    // Get the last character from the display
-    const lastChar = display.value.slice(-1);
-
-    // Prevent adding operator after another operator
-    if ("+-*/".includes(lastChar)) return;
-
-    // Add operator to the display
-    display.value += operator;
+    display.value = Calculator.appendOperator(display.value, operator);
+    justEvaluated = false;
   }
 
 
@@ -100,19 +112,78 @@ document.addEventListener("DOMContentLoaded", () => {
   /**********************************************************
    * STEP 9: CALCULATE RESULT
    * --------------------------------------------------------
-   * eval() evaluates the math expression as JavaScript.
+   * Calculator.evaluate() (from calculator.js) parses the
+   * expression itself instead of running it through eval(),
+   * so only numbers and + - * / are ever accepted.
    *
    * Example:
    * "12+3*4" → 24
    *
-   * try/catch prevents the app from crashing if input is invalid
+   * try/catch shows "Error" if the expression is invalid
    **********************************************************/
   calcBtn.addEventListener("click", () => {
     try {
-      display.value = eval(display.value);
+      const result = Calculator.evaluate(display.value);
+      display.value = Calculator.formatResult(result);
     } catch (error) {
-      display.value = "Error";
+      display.value =
+        error instanceof Calculator.DivisionByZeroError
+          ? "Can't divide by 0"
+          : "Error";
     }
+    justEvaluated = true;
+  });
+
+
+  /**********************************************************
+   * STEP 10: CLEAR AND BACKSPACE
+   * --------------------------------------------------------
+   * C → empties the display
+   * ⌫ → removes the last character (or clears an error)
+   **********************************************************/
+  function clearDisplay() {
+    display.value = "";
+    justEvaluated = false;
+  }
+
+  function deleteLast() {
+    display.value = Calculator.backspace(display.value);
+    justEvaluated = false;
+  }
+
+  clearBtn.addEventListener("click", clearDisplay);
+  backBtn.addEventListener("click", deleteLast);
+
+
+  /**********************************************************
+   * STEP 11: KEYBOARD SUPPORT
+   * --------------------------------------------------------
+   * 0-9 and + - * /  → same as clicking the button
+   * Enter or =       → Calculate
+   * Backspace        → delete last character
+   * Escape or Delete → clear
+   *
+   * Every key goes through the same functions as the buttons,
+   * so the same validation rules apply.
+   **********************************************************/
+  document.addEventListener("keydown", event => {
+    if (event.ctrlKey || event.metaKey || event.altKey) return;
+
+    const key = event.key;
+    if (/^[0-9]$/.test(key)) {
+      addDigit(key);
+    } else if (Calculator.OPERATORS.includes(key)) {
+      addOperator(key);
+    } else if (key === "Enter" || key === "=") {
+      calcBtn.click();
+    } else if (key === "Backspace") {
+      deleteLast();
+    } else if (key === "Escape" || key === "Delete") {
+      clearDisplay();
+    } else {
+      return; // let the browser handle every other key
+    }
+    event.preventDefault();
   });
 
 });

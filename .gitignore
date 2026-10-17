@@ -1,0 +1,12 @@
+# Dependencies (none are required today, but keep installs out of git)
+node_modules/
+
+# Logs and test output
+npm-debug.log*
+coverage/
+
+# Editor / OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
