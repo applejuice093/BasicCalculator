@@ -112,6 +112,23 @@ button:active {
     box-shadow: none;
 }
 
+/* SMALL SCREENS
+ * The layout uses fixed pixel sizes, so on phones narrower than
+ * the 450px calculator we scale the whole thing down instead of
+ * letting it overflow and scroll sideways. */
+@media (max-width: 470px) {
+    #main {
+        zoom: 0.8;
+        margin: 40px auto;
+    }
+}
+
+@media (max-width: 380px) {
+    #main {
+        zoom: 0.68;
+    }
+}
+
 /* KEYBOARD FOCUS (visible when tabbing through the buttons) */
 button:focus-visible {
     outline: 3px solid #1e90ff;
