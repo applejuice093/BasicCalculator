@@ -111,3 +111,9 @@ button {
 button:active {
     box-shadow: none;
 }
+
+/* KEYBOARD FOCUS (visible when tabbing through the buttons) */
+button:focus-visible {
+    outline: 3px solid #1e90ff;
+    outline-offset: 2px;
+}

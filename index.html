@@ -11,10 +11,16 @@
     <div id="main">
       <div id="head">CALCULATOR</div>
 
-      <input type="text" id="res" readonly />
+      <input
+        type="text"
+        id="res"
+        readonly
+        aria-label="Calculator display"
+        aria-live="polite"
+      />
 
       <!-- KEYPAD WRAPPER -->
-      <div id="keypad">
+      <div id="keypad" role="group" aria-label="Calculator keypad">
         <!-- NUMBER KEYS -->
         <div id="keys">
           <button>1</button><button>2</button><button>3</button
@@ -22,16 +28,16 @@
           ><button>7</button><button>8</button> <button>9</button
           ><button>0</button>
           <button id="calc">Calculate</button>
-          <button id="clear" class="wide">C</button>
-          <button id="back" class="wide">&#9003;</button>
+          <button id="clear" class="wide" aria-label="Clear">C</button>
+          <button id="back" class="wide" aria-label="Backspace">&#9003;</button>
         </div>
 
         <!-- M KEYS -->
         <div id="mkeys">
-          <button id="add">+</button>
-          <button id="sub">-</button>
-          <button id="multi">*</button>
-          <button id="div">/</button>
+          <button id="add" aria-label="Plus">+</button>
+          <button id="sub" aria-label="Minus">-</button>
+          <button id="multi" aria-label="Multiply">*</button>
+          <button id="div" aria-label="Divide">/</button>
         </div>
       </div>
     </div>
