@@ -105,6 +105,7 @@ button {
     box-shadow: 0px 2px 5px black;
     border: none;
     cursor: pointer;
+    font-size: 18px;
 }
 
 /* BUTTON PRESS EFFECT */
