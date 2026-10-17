@@ -114,5 +114,52 @@
     return String(parseFloat(value.toPrecision(12)));
   }
 
-  return { OPERATORS, DivisionByZeroError, tokenize, evaluate, formatResult };
+  /**
+   * True when the display holds a message such as "Error" rather
+   * than an expression the user can keep typing into.
+   * @param {string} text
+   */
+  function isMessage(text) {
+    return /[^0-9.+\-*/]/.test(text);
+  }
+
+  /**
+   * Text after pressing a digit key.
+   * After an error message, or right after "=" (startFresh), the
+   * digit starts a new expression instead of being glued on
+   * ("Error5" or "245" after 24 was shown).
+   * @param {string} current display text
+   * @param {string} digit "0".."9"
+   * @param {boolean} [startFresh] true right after a calculation
+   * @returns {string}
+   */
+  function appendDigit(current, digit, startFresh = false) {
+    if (startFresh || isMessage(current)) return digit;
+    return current + digit;
+  }
+
+  /**
+   * Text after pressing an operator key.
+   * Ignored on an empty display, after an error message, or
+   * directly after another operator.
+   * @param {string} current display text
+   * @param {string} operator one of + - * /
+   * @returns {string}
+   */
+  function appendOperator(current, operator) {
+    if (current === "" || isMessage(current)) return current;
+    if (OPERATORS.includes(current.slice(-1))) return current;
+    return current + operator;
+  }
+
+  return {
+    OPERATORS,
+    DivisionByZeroError,
+    tokenize,
+    evaluate,
+    formatResult,
+    isMessage,
+    appendDigit,
+    appendOperator,
+  };
 });

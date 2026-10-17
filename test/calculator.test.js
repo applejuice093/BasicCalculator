@@ -6,6 +6,8 @@ const {
   tokenize,
   evaluate,
   formatResult,
+  appendDigit,
+  appendOperator,
   DivisionByZeroError,
 } = require("../calculator.js");
 
@@ -51,4 +53,18 @@ test("formatResult hides floating-point noise", () => {
   assert.equal(formatResult(0.1 + 0.2), "0.3");
   assert.equal(formatResult(evaluate("1/3*3")), "1");
   assert.equal(formatResult(-42), "-42");
+});
+
+test("appendDigit builds numbers and restarts after results or errors", () => {
+  assert.equal(appendDigit("12", "3"), "123");
+  assert.equal(appendDigit("24", "5", true), "5");
+  assert.equal(appendDigit("Error", "5"), "5");
+  assert.equal(appendDigit("Can't divide by 0", "7"), "7");
+});
+
+test("appendOperator blocks invalid operator placement", () => {
+  assert.equal(appendOperator("", "+"), "");
+  assert.equal(appendOperator("12", "+"), "12+");
+  assert.equal(appendOperator("12+", "+"), "12+");
+  assert.equal(appendOperator("Error", "*"), "Error");
 });

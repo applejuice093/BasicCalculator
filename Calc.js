@@ -57,34 +57,38 @@ document.addEventListener("DOMContentLoaded", () => {
    * --------------------------------------------------------
    * When a number button is clicked:
    * → Its text (1,2,3...) is appended to the display
+   * → Right after a result or an error, it starts a new
+   *   expression instead (see Calculator.appendDigit)
+   *
+   * justEvaluated remembers whether the display currently
+   * shows the answer of the last calculation.
    **********************************************************/
+  let justEvaluated = false;
+
+  function addDigit(digit) {
+    display.value = Calculator.appendDigit(display.value, digit, justEvaluated);
+    justEvaluated = false;
+  }
+
   numberButtons.forEach(button => {
-    button.addEventListener("click", () => {
-      display.value += button.innerText;
-    });
+    button.addEventListener("click", () => addDigit(button.innerText));
   });
 
 
   /**********************************************************
    * STEP 7: FUNCTION TO ADD OPERATORS SAFELY
    * --------------------------------------------------------
-   * This function prevents:
+   * Calculator.appendOperator prevents:
    * → Starting with an operator (+12 ❌)
    * → Multiple operators in a row (12++ ❌)
+   * → Operators after an error message (Error+ ❌)
+   *
+   * Pressing an operator after a result keeps the result,
+   * so "24" then "+" continues with "24+".
    **********************************************************/
   function addOperator(operator) {
-
-    // Do nothing if display is empty
-    if (display.value === "") return;
-
-    // Get the last character from the display
-    const lastChar = display.value.slice(-1);
-
-    // Prevent adding operator after another operator
-    if ("+-*/".includes(lastChar)) return;
-
-    // Add operator to the display
-    display.value += operator;
+    display.value = Calculator.appendOperator(display.value, operator);
+    justEvaluated = false;
   }
 
 
@@ -119,6 +123,7 @@ document.addEventListener("DOMContentLoaded", () => {
           ? "Can't divide by 0"
           : "Error";
     }
+    justEvaluated = true;
   });
 
 });
