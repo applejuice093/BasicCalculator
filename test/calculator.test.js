@@ -67,4 +67,16 @@ test("appendOperator blocks invalid operator placement", () => {
   assert.equal(appendOperator("12", "+"), "12+");
   assert.equal(appendOperator("12+", "+"), "12+");
   assert.equal(appendOperator("Error", "*"), "Error");
+  assert.equal(appendOperator("-", "+"), "-");
+});
+
+test("appendOperator replaces a mistyped trailing operator", () => {
+  assert.equal(appendOperator("12+", "*"), "12*");
+  assert.equal(appendOperator("2*-", "+"), "2+");
+});
+
+test("appendOperator allows negative numbers", () => {
+  assert.equal(appendOperator("", "-"), "-");
+  assert.equal(appendOperator("2*", "-"), "2*-");
+  assert.equal(evaluate("2*-3"), -6);
 });

@@ -140,16 +140,28 @@
 
   /**
    * Text after pressing an operator key.
-   * Ignored on an empty display, after an error message, or
-   * directly after another operator.
+   * → "-" on an empty display starts a negative number ("-5")
+   * → "-" after * or / makes the next number negative ("2*-3")
+   * → any other operator replaces the trailing one, so a
+   *   mis-typed "12+" becomes "12*" when "*" is pressed
+   * → ignored after an error message
    * @param {string} current display text
    * @param {string} operator one of + - * /
    * @returns {string}
    */
   function appendOperator(current, operator) {
-    if (current === "" || isMessage(current)) return current;
-    if (OPERATORS.includes(current.slice(-1))) return current;
-    return current + operator;
+    if (isMessage(current)) return current;
+    if (current === "") return operator === "-" ? "-" : "";
+
+    const last = current.slice(-1);
+    if (!OPERATORS.includes(last)) return current + operator;
+    if (operator === "-" && (last === "*" || last === "/")) {
+      return current + operator;
+    }
+
+    // Swap the trailing operator(s) for the new one, e.g. "2*-" → "2+".
+    const base = current.replace(/[+\-*/]+$/, "");
+    return base === "" ? current : base + operator;
   }
 
   return {
