@@ -17,6 +17,10 @@ document.addEventListener("DOMContentLoaded", () => {
    * This is the input box where:
    * → Numbers appear when buttons are clicked
    * → Result is shown after calculation
+   *
+   * It is readonly in index.html, so text can only enter it
+   * through the buttons (and keyboard handler below) that
+   * validate every keystroke.
    **********************************************************/
   const display = document.getElementById("res");
 
