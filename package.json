@@ -1,0 +1,12 @@
+{
+  "name": "basic-calculator",
+  "version": "1.0.0",
+  "description": "A small browser calculator built with plain HTML, CSS and JavaScript.",
+  "private": true,
+  "scripts": {
+    "test": "node --test test/"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
