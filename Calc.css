@@ -72,9 +72,11 @@ body {
 
 }
 
-/* CALCULATE BUTTON */
-#calc {
+/* CALCULATE, CLEAR AND BACKSPACE BUTTONS (two columns wide) */
+#calc,
+.wide {
     width: 130px;
+    grid-column: span 2;
 }
 
 /* M KEYS */

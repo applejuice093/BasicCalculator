@@ -164,6 +164,16 @@
     return base === "" ? current : base + operator;
   }
 
+  /**
+   * Text after pressing backspace: drop the last character,
+   * or clear the display entirely if it shows an error message.
+   * @param {string} current display text
+   * @returns {string}
+   */
+  function backspace(current) {
+    return isMessage(current) ? "" : current.slice(0, -1);
+  }
+
   return {
     OPERATORS,
     DivisionByZeroError,
@@ -173,5 +183,6 @@
     isMessage,
     appendDigit,
     appendOperator,
+    backspace,
   };
 });

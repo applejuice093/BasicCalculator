@@ -8,6 +8,7 @@ const {
   formatResult,
   appendDigit,
   appendOperator,
+  backspace,
   DivisionByZeroError,
 } = require("../calculator.js");
 
@@ -79,4 +80,11 @@ test("appendOperator allows negative numbers", () => {
   assert.equal(appendOperator("", "-"), "-");
   assert.equal(appendOperator("2*", "-"), "2*-");
   assert.equal(evaluate("2*-3"), -6);
+});
+
+test("backspace removes one character or clears a message", () => {
+  assert.equal(backspace("123"), "12");
+  assert.equal(backspace("12+"), "12");
+  assert.equal(backspace(""), "");
+  assert.equal(backspace("Error"), "");
 });

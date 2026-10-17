@@ -24,14 +24,16 @@ document.addEventListener("DOMContentLoaded", () => {
   /**********************************************************
    * STEP 3: GET ALL NUMBER BUTTONS
    * --------------------------------------------------------
-   * We select buttons inside #keys EXCEPT the Calculate button.
+   * We select buttons inside #keys EXCEPT Calculate, Clear
+   * and Backspace.
    *
    * CSS selector explanation:
    * #keys button        → all buttons inside #keys
    * :not(#calc)         → exclude Calculate button
+   * :not(.wide)         → exclude Clear and Backspace buttons
    **********************************************************/
   const numberButtons = document.querySelectorAll(
-    "#keys button:not(#calc)"
+    "#keys button:not(#calc):not(.wide)"
   );
 
 
@@ -50,6 +52,8 @@ document.addEventListener("DOMContentLoaded", () => {
    * STEP 5: GET THE CALCULATE BUTTON
    **********************************************************/
   const calcBtn = document.getElementById("calc");
+  const clearBtn = document.getElementById("clear");
+  const backBtn = document.getElementById("back");
 
 
   /**********************************************************
@@ -125,5 +129,25 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     justEvaluated = true;
   });
+
+
+  /**********************************************************
+   * STEP 10: CLEAR AND BACKSPACE
+   * --------------------------------------------------------
+   * C → empties the display
+   * ⌫ → removes the last character (or clears an error)
+   **********************************************************/
+  function clearDisplay() {
+    display.value = "";
+    justEvaluated = false;
+  }
+
+  function deleteLast() {
+    display.value = Calculator.backspace(display.value);
+    justEvaluated = false;
+  }
+
+  clearBtn.addEventListener("click", clearDisplay);
+  backBtn.addEventListener("click", deleteLast);
 
 });
