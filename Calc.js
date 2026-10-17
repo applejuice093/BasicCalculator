@@ -100,16 +100,18 @@ document.addEventListener("DOMContentLoaded", () => {
   /**********************************************************
    * STEP 9: CALCULATE RESULT
    * --------------------------------------------------------
-   * eval() evaluates the math expression as JavaScript.
+   * Calculator.evaluate() (from calculator.js) parses the
+   * expression itself instead of running it through eval(),
+   * so only numbers and + - * / are ever accepted.
    *
    * Example:
    * "12+3*4" → 24
    *
-   * try/catch prevents the app from crashing if input is invalid
+   * try/catch shows "Error" if the expression is invalid
    **********************************************************/
   calcBtn.addEventListener("click", () => {
     try {
-      display.value = eval(display.value);
+      display.value = Calculator.evaluate(display.value);
     } catch (error) {
       display.value = "Error";
     }
