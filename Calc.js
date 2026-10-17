@@ -111,7 +111,8 @@ document.addEventListener("DOMContentLoaded", () => {
    **********************************************************/
   calcBtn.addEventListener("click", () => {
     try {
-      display.value = Calculator.evaluate(display.value);
+      const result = Calculator.evaluate(display.value);
+      display.value = Calculator.formatResult(result);
     } catch (error) {
       display.value =
         error instanceof Calculator.DivisionByZeroError

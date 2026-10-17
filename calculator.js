@@ -104,5 +104,15 @@
     return result;
   }
 
-  return { OPERATORS, DivisionByZeroError, tokenize, evaluate };
+  /**
+   * Turn a result into display text, hiding binary floating-point
+   * noise such as 10/3 = 3.3333333333333335 or 0.1+0.2 = 0.30000000000000004.
+   * @param {number} value
+   * @returns {string}
+   */
+  function formatResult(value) {
+    return String(parseFloat(value.toPrecision(12)));
+  }
+
+  return { OPERATORS, DivisionByZeroError, tokenize, evaluate, formatResult };
 });
